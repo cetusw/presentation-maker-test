@@ -1,2 +1,4 @@
 # presentation-maker
-Project for Frontend course\nКугелев Михаил ПС-21
+Project for Frontend course
+
+Кугелев Михаил ПС-21
