@@ -131,7 +131,18 @@ function createNewSlide(presentation: Presentation): Presentation {
 function removeSlides(presentation: Presentation, slides: ItemSelection): Presentation {
     const indexesToRemove: number[] = slides.selectedSlides.map(slide => slide.index);
 
-    const updatedSlides: SlideCollection = presentation.slides.filter(slide => indexesToRemove.indexOf(slide.index) === -1);
+    const remainingSlides: SlideCollection = presentation.slides.filter(slide => indexesToRemove.indexOf(slide.index) === -1);
+
+    const updatedSlides: SlideCollection = [];
+    let newIndex: number = 0
+    for (const slide of remainingSlides) {
+        const updatedSlide: Slide = {
+            ...slide,
+            index: newIndex
+        };
+        updatedSlides.push(updatedSlide);
+        newIndex++;
+    }
 
     return {
         ...presentation,
@@ -139,7 +150,7 @@ function removeSlides(presentation: Presentation, slides: ItemSelection): Presen
     };
 }
 
-// function changeSlideIndex(presentation: Presentation): Presentation {
+// function changeSlideIndex(presentation: Presentation, slides: ItemSelection): Presentation {
 //
 // }
 
@@ -170,7 +181,7 @@ console.log(updatedPresentation)
 
 let slide: Slide[] = [
     {
-        index: 1,
+        index: 0,
         background: {
             type: 'image',
             imageUrl: '',
@@ -193,5 +204,5 @@ let newSelectedSlides: ItemSelection = {
     selectedObjects: [],
 }
 
-updatedPresentation = removeSlides(testPresentation, newSelectedSlides)
+updatedPresentation = removeSlides(updatedPresentation, newSelectedSlides)
 console.log(updatedPresentation)
