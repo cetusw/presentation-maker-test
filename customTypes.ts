@@ -5,7 +5,6 @@ const testPresentation: Presentation = {
     createdAt: new Date('2024-09-05T00:00:00Z'),
     slides: [
         {
-            index: 0,
             background: {
                 type: 'color',
                 color: '#FFFFFF',
@@ -28,7 +27,6 @@ const testPresentation: Presentation = {
             ],
         },
         {
-            index: 1,
             background: {
                 type: 'image',
                 imageUrl: '',
@@ -58,7 +56,6 @@ type Presentation = {
 type SlideCollection = Slide[];
 
 type Slide = {
-    index: number;
     background: Background;
     objects: SlideObject[];
 }
@@ -112,7 +109,6 @@ function updatePresentationTitle(presentation: Presentation, newTitle: string): 
 
 function createNewSlide(presentation: Presentation): Presentation {
     const newSlide: Slide = {
-        index: getLastSlideIndex(presentation) + 1,
         background: {
             type: 'color',
             color: '#FFFFFF',
@@ -129,20 +125,11 @@ function createNewSlide(presentation: Presentation): Presentation {
 }
 
 function removeSlides(presentation: Presentation, slides: ItemSelection): Presentation {
-    const indexesToRemove: number[] = slides.selectedSlides.map(slide => slide.index);
+    const slidesToRemove = slides.selectedSlides
 
-    const remainingSlides: SlideCollection = presentation.slides.filter(slide => indexesToRemove.indexOf(slide.index) === -1);
-
-    const updatedSlides: SlideCollection = [];
-    let newIndex: number = 0
-    for (const slide of remainingSlides) {
-        const updatedSlide: Slide = {
-            ...slide,
-            index: newIndex
-        };
-        updatedSlides.push(updatedSlide);
-        newIndex++;
-    }
+    const updatedSlides: SlideCollection = presentation.slides.filter(
+        slide => !slidesToRemove.some(toRemove => JSON.stringify(slide) === JSON.stringify(toRemove))
+    );
 
     return {
         ...presentation,
@@ -150,27 +137,39 @@ function removeSlides(presentation: Presentation, slides: ItemSelection): Presen
     };
 }
 
-// function changeSlideIndex(presentation: Presentation, slides: ItemSelection): Presentation {
-//
-// }
+function changeSlideIndex(presentation: Presentation, slides: ItemSelection, newIndex: number): Presentation {
+    const updatedSlides: SlideCollection = [...presentation.slides];
 
-function getLastSlideIndex(presentation: Presentation): number {
-    if (presentation.slides.length > 0) {
-        return presentation.slides[presentation.slides.length - 1].index;
-    } else {
-        return 0;
+    const slideToMove = slides.selectedSlides[0];
+    let currentIndex = findSlideIndex(updatedSlides, slideToMove);
+
+    if (currentIndex === null) {
+        return presentation;
     }
+
+    updatedSlides.splice(currentIndex, 1);
+    updatedSlides.splice(newIndex, 0, slideToMove);
+
+    return {
+        ...presentation,
+        slides: updatedSlides,
+    };
 }
 
-function findSlideByIndex(slideCollection: SlideCollection, index: number): Slide|undefined {
-    for (let slide of slideCollection) {
-        if (slide.index === index) {
-            return slide;
+function findSlideIndex(slides: SlideCollection, slide: Slide) {
+    let currentIndex: number | null = null;
+    for (let i = 0; i < slides.length; i++) {
+        if (JSON.stringify(slides[i]) === JSON.stringify(slide)) {
+            currentIndex = i;
+            break;
         }
     }
-    return undefined;
+
+    return currentIndex;
 }
 
+
+//Отладка
 console.log(testPresentation)
 
 let updatedPresentation = updatePresentationTitle(testPresentation, 'new title')
@@ -181,19 +180,24 @@ console.log(updatedPresentation)
 
 let slide: Slide[] = [
     {
-        index: 0,
         background: {
-            type: 'image',
-            imageUrl: '',
+            type: 'color',
+            color: '#FFFFFF',
         },
         objects: [
             {
                 type: 'text',
                 content: 'Test Presentation',
                 fontName: 'Arial',
-                fontSize: 30,
-                position: {x: 80, y: 70},
-                size: {width: 350, height: 60},
+                fontSize: 24,
+                position: { x: 100, y: 50 },
+                size: { width: 400, height: 50 },
+            },
+            {
+                type: 'image',
+                imageUrl: '',
+                position: { x: 50, y: 150 },
+                size: { width: 200, height: 150 },
             },
         ],
     }
@@ -204,5 +208,6 @@ let newSelectedSlides: ItemSelection = {
     selectedObjects: [],
 }
 
-updatedPresentation = removeSlides(updatedPresentation, newSelectedSlides)
+// updatedPresentation = removeSlides(updatedPresentation, newSelectedSlides)
+updatedPresentation = changeSlideIndex(updatedPresentation, newSelectedSlides, 2)
 console.log(updatedPresentation)
