@@ -1,147 +1,14 @@
-const defaultPosition: Position = {x: 50, y: 50};
-const defaultSize: Size = {width: 50, height: 50};
-const defaultFontFamily: string = 'Arial';
-const defaultFontSize: number = 16;
-const defaultColor: string = '#FFFFFF';
-const defaultText: string = 'New text';
-const defaultTitle: string = 'New title';
+import {defaultColor, defaultFontFamily, defaultFontSize, defaultPosition, defaultSize, defaultText} from "./constants";
+import {Presentation, Slide, SlideObject, Background, SlideCollection, ItemSelection, ImageObject, TextObject, Position, Size} from "./presentationTypes";
 
-enum Background {
-    BackgroundColor = 'color',
-    BackgroundImage = 'image',
-    BackgroundGradient = 'gradient',
-}
-
-const testPresentation: Presentation = {
-    id: '1',
-    title: 'Test Presentation',
-    author: 'Mikhail',
-    createdAt: new Date('2024-09-05T00:00:00Z'),
-    slides: [
-        {
-            id: 'slide-1',
-            background: {
-                type: Background.BackgroundColor,
-                color: defaultColor,
-            },
-            objects: [
-                {
-                    id: 'text-1',
-                    type: 'text',
-                    content: 'Test Presentation',
-                    fontFamily: 'Arial',
-                    fontSize: 24,
-                    position: { x: 100, y: 50 },
-                    size: { width: 400, height: 50 },
-                },
-                {
-                    id: 'image-1',
-                    type: 'image',
-                    imageUrl: '',
-                    position: { x: 50, y: 150 },
-                    size: { width: 200, height: 150 },
-                },
-            ],
-        },
-        {
-            id: 'slide-2',
-            background: {
-                type: Background.BackgroundImage,
-                imageUrl: defaultColor,
-            },
-            objects: [
-                {
-                    id: 'text-1',
-                    type: 'text',
-                    content: 'Test Presentation',
-                    fontFamily: 'Arial',
-                    fontSize: 30,
-                    position: { x: 80, y: 70 },
-                    size: { width: 350, height: 60 },
-                },
-            ],
-        },
-    ],
-};
-
-type Presentation = {
-    id: string;
-    title: string;
-    author: string;
-    createdAt: Date;
-    slides: SlideCollection;
-}
-
-type SlideCollection = Slide[];
-
-type Slide = {
-    id: string;
-    background: BackgroundType;
-    objects: SlideObject[];
-}
-
-type BackgroundType = BackgroundColor | BackgroundImage | BackgroundGradient;
-
-type BackgroundColor = {
-    type: Background.BackgroundColor;
-    color: string;
-};
-
-type BackgroundImage = {
-    type: Background.BackgroundImage;
-    imageUrl: string;
-};
-
-type BackgroundGradient = {
-    type: Background.BackgroundGradient;
-    firstColor: string;
-    secondColor: string;
-};
-
-type SlideObject = TextObject | ImageObject;
-
-type SlideItem = {
-    position: Position;
-    size: Size;
-}
-
-type TextObject = {
-    id: string;
-    type: 'text';
-    content: string;
-    fontFamily: string;
-    fontSize: number;
-} & SlideItem;
-
-type ImageObject = {
-    id: string;
-    type: 'image';
-    imageUrl: string;
-} & SlideItem;
-
-type Position = {
-    x: number;
-    y: number;
-}
-
-type Size = {
-    width: number;
-    height: number;
-}
-
-type ItemSelection = {
-    selectedSlides: string[];
-    selectedObjects: string[];
-}
-
-function updatePresentationTitle(presentation: Presentation, newTitle: string): Presentation {
+export function updatePresentationTitle(presentation: Presentation, newTitle: string): Presentation {
     return {
         ...presentation,
         title: newTitle,
     };
 }
 
-function addNewSlide(presentation: Presentation): Presentation {
+export function addNewSlide(presentation: Presentation): Presentation {
     const newSlide: Slide = {
         id: `slide-${Date.now()}`,
         background: {
@@ -159,7 +26,7 @@ function addNewSlide(presentation: Presentation): Presentation {
     };
 }
 
-function removeSlides(presentation: Presentation, items: ItemSelection): Presentation {
+export function removeSlides(presentation: Presentation, items: ItemSelection): Presentation {
     const slidesToRemove = items.selectedSlides
 
     const updatedSlides: SlideCollection = presentation.slides.filter(
@@ -172,7 +39,7 @@ function removeSlides(presentation: Presentation, items: ItemSelection): Present
     };
 }
 
-function updateSlideIndex(presentation: Presentation, items: ItemSelection, newIndex: number): Presentation {
+export function updateSlideIndex(presentation: Presentation, items: ItemSelection, newIndex: number): Presentation {
     const updatedSlides: SlideCollection = [...presentation.slides];
 
     const slideIdToMove = items.selectedSlides[0];
@@ -191,7 +58,7 @@ function updateSlideIndex(presentation: Presentation, items: ItemSelection, newI
     };
 }
 
-function addTextToSlide(presentation: Presentation, items: ItemSelection) {
+export function addTextToSlide(presentation: Presentation, items: ItemSelection) {
     const slideIdToEdit: string = items.selectedSlides[0];
 
     const textForSlide: TextObject = {
@@ -223,7 +90,7 @@ function addTextToSlide(presentation: Presentation, items: ItemSelection) {
     }
 }
 
-function addImageToSlide(presentation: Presentation, items: ItemSelection, url: string) {
+export function addImageToSlide(presentation: Presentation, items: ItemSelection, url: string) {
     const slideIdToEdit: string = items.selectedSlides[0];
 
     const imageForSlide: ImageObject = {
@@ -253,7 +120,7 @@ function addImageToSlide(presentation: Presentation, items: ItemSelection, url: 
     }
 }
 
-function removeObjectFromSlide(presentation: Presentation, items: ItemSelection): Presentation {
+export function removeObjectFromSlide(presentation: Presentation, items: ItemSelection): Presentation {
     const slideIdToEdit: string = items.selectedSlides[0];
     const objectsIdsToRemove: string[] = items.selectedObjects;
 
@@ -281,7 +148,7 @@ function removeObjectFromSlide(presentation: Presentation, items: ItemSelection)
     };
 }
 
-function updateObjectPosition(presentation: Presentation, items: ItemSelection, newPosition: Position) {
+export function updateObjectPosition(presentation: Presentation, items: ItemSelection, newPosition: Position) {
     const slideIdToEdit: string = items.selectedSlides[0];
     const objectIdToEdit: string = items.selectedObjects[0];
 
@@ -314,7 +181,7 @@ function updateObjectPosition(presentation: Presentation, items: ItemSelection, 
     };
 }
 
-function updateObjectSize(presentation: Presentation, items: ItemSelection, newSize: Size) {
+export function updateObjectSize(presentation: Presentation, items: ItemSelection, newSize: Size) {
     const slideIdToEdit: string = items.selectedSlides[0];
     const objectIdToEdit: string = items.selectedObjects[0];
 
@@ -347,7 +214,7 @@ function updateObjectSize(presentation: Presentation, items: ItemSelection, newS
     };
 }
 
-function updateTextContent(presentation: Presentation, items: ItemSelection, newText: string) {
+export function updateTextContent(presentation: Presentation, items: ItemSelection, newText: string) {
     const slideIdToEdit: string = items.selectedSlides[0];
     const textIdToEdit: string = items.selectedObjects[0];
 
@@ -380,7 +247,7 @@ function updateTextContent(presentation: Presentation, items: ItemSelection, new
     };
 }
 
-function updateTextFontSize(presentation: Presentation, items: ItemSelection, newFontSize: number) {
+export function updateTextFontSize(presentation: Presentation, items: ItemSelection, newFontSize: number) {
     const slideIdToEdit: string = items.selectedSlides[0];
     const textIdToEdit: string = items.selectedObjects[0];
 
@@ -413,7 +280,7 @@ function updateTextFontSize(presentation: Presentation, items: ItemSelection, ne
     };
 }
 
-function updateTextFontFamily(presentation: Presentation, items: ItemSelection, newFontFamily: string) {
+export function updateTextFontFamily(presentation: Presentation, items: ItemSelection, newFontFamily: string) {
     const slideIdToEdit: string = items.selectedSlides[0];
     const textIdToEdit: string = items.selectedObjects[0];
 
@@ -446,7 +313,7 @@ function updateTextFontFamily(presentation: Presentation, items: ItemSelection, 
     };
 }
 
-function updateBackgroundColor(presentation: Presentation, items: ItemSelection, newColor: string) {
+export function updateBackgroundColor(presentation: Presentation, items: ItemSelection, newColor: string) {
     const slideIdToEdit: string = items.selectedSlides[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
@@ -472,7 +339,7 @@ function updateBackgroundColor(presentation: Presentation, items: ItemSelection,
     };
 }
 
-function updateBackgroundImage(presentation: Presentation, items: ItemSelection, newUrl: string) {
+export function updateBackgroundImage(presentation: Presentation, items: ItemSelection, newUrl: string) {
     const slideIdToEdit: string = items.selectedSlides[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
@@ -498,7 +365,7 @@ function updateBackgroundImage(presentation: Presentation, items: ItemSelection,
     };
 }
 
-function updateBackgroundGradient(presentation: Presentation, items: ItemSelection, newFirstColor: string, newSecondColor: string) {
+export function updateBackgroundGradient(presentation: Presentation, items: ItemSelection, newFirstColor: string, newSecondColor: string) {
     const slideIdToEdit: string = items.selectedSlides[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
@@ -542,55 +409,3 @@ function findSlideById(slides: SlideCollection, slideId: string) {
         }
     }
 }
-
-
-//Отладка
-
-// let updatedPresentation = updatePresentationTitle(testPresentation, 'new title')
-// console.log(updatedPresentation)
-//
-// updatedPresentation = createNewSlide(testPresentation)
-// console.log(updatedPresentation)
-
-let newSelectedItems: ItemSelection = {
-    selectedSlides: ['slide-1'],
-    selectedObjects: ['image-1', 'text-1'],
-}
-
-console.log(testPresentation.slides[0]);
-
-// let updatedPresentation = removeSlides(testPresentation, newSelectedItems)
-// console.log(updatedPresentation);
-
-// let updatedPresentation = updateSlideIndex(testPresentation, newSelectedItems, 2);
-// console.log(updatedPresentation);
-
-// let updatedPresentation = addTextToSlide(testPresentation, newSelectedItems);
-// console.log(updatedPresentation.slides[0].objects);
-
-// let updatedPresentation = removeObjectFromSlide(testPresentation, newSelectedItems)
-// console.log(updatedPresentation.slides)
-
-// let updatedPresentation = addImageToSlide(testPresentation, newSelectedItems, '/url')
-// console.log(updatedPresentation.slides[0].objects)
-
-// let updatedPresentation = updateObjectPosition(testPresentation, newSelectedItems, 1, 1)
-// console.log(updatedPresentation.slides[0].objects)
-
-// let updatedPresentation = updateTextContent(testPresentation, newSelectedItems, 'super new text')
-// console.log(updatedPresentation.slides[0].objects)
-
-// let updatedPresentation = updateTextFontSize(testPresentation, newSelectedItems, 30)
-// console.log(updatedPresentation.slides[0].objects)
-
-// let updatedPresentation = updateTextFontFamily(testPresentation, newSelectedItems, 'Montserrat')
-// console.log(updatedPresentation.slides[0].objects)
-
-// let updatedPresentation = updateBackgroundColor(testPresentation, newSelectedItems, '#000000')
-// console.log(updatedPresentation.slides[0])
-
-// let updatedPresentation = updateBackgroundImage(testPresentation, newSelectedItems, '/new-url')
-// console.log(updatedPresentation.slides[0])
-
-// let updatedPresentation = updateBackgroundGradient(testPresentation, newSelectedItems, '#123456', '#654321')
-// console.log(updatedPresentation.slides[0])
