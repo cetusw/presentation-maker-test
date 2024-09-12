@@ -43,19 +43,19 @@ export type SlideItem = {
     size: Size;
 }
 
-export type TextObject = {
+export type TextObject = SlideItem & {
     id: string;
     type: 'text';
     content: string;
     fontFamily: string;
     fontSize: number;
-} & SlideItem;
+};
 
-export type ImageObject = {
+export type ImageObject = SlideItem & {
     id: string;
     type: 'image';
     imageUrl: string;
-} & SlideItem;
+};
 
 export type Position = {
     x: number;
@@ -68,6 +68,6 @@ export type Size = {
 }
 
 export type ItemSelection = {
-    selectedSlides: string[];
-    selectedObjects: string[];
+    selectedSlidesIds: string[];
+    selectedObjectsIds: string[];
 }

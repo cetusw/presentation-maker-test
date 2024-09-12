@@ -61,8 +61,8 @@ const testPresentation: Presentation = {
 };
 
 const newSelectedItems: ItemSelection = {
-    selectedSlides: ['slide-1'],
-    selectedObjects: ['image-1', 'text-1'],
+    selectedSlidesIds: ['slide-1'],
+    selectedObjectsIds: ['image-1', 'text-1'],
 }
 
 console.log(testPresentation.slides[0]);
