@@ -17,7 +17,7 @@ const testPresentation: Presentation = {
         {
             id: 'slide-1',
             background: {
-                type: Background.BackgroundColor,
+                type: 'color',
                 color: defaultColor,
             },
             objects: [
@@ -42,8 +42,8 @@ const testPresentation: Presentation = {
         {
             id: 'slide-2',
             background: {
-                type: Background.BackgroundImage,
-                imageUrl: defaultColor,
+                type: 'image',
+                imageUrl: '',
             },
             objects: [
                 {
@@ -94,11 +94,11 @@ console.log(testPresentation.slides[0]);
 // let updatedPresentation = updateTextFontFamily(testPresentation, newSelectedItems, 'Montserrat')
 // console.log(updatedPresentation.slides[0].objects)
 
-// let updatedPresentation = updateBackgroundColor(testPresentation, newSelectedItems, '#000000')
-// console.log(updatedPresentation.slides[0])
+let updatedPresentation = updateBackgroundColor(testPresentation, newSelectedItems, '#000000')
+console.log(updatedPresentation.slides[0])
 
 // let updatedPresentation = updateBackgroundImage(testPresentation, newSelectedItems, '/new-url')
 // console.log(updatedPresentation.slides[0])
 
-let updatedPresentation = updateBackgroundGradient(testPresentation, newSelectedItems, '#123456', '#654321')
-console.log(updatedPresentation.slides[0])
+//let updatedPresentation = updateBackgroundGradient(testPresentation, newSelectedItems, '#123456', '#654321')
+//console.log(updatedPresentation.slides[0])

@@ -12,7 +12,7 @@ export function addNewSlide(presentation: Presentation): Presentation {
     const newSlide: Slide = {
         id: `slide-${Date.now()}`,
         background: {
-            type: Background.BackgroundColor,
+            type: 'color',
             color: defaultColor,
         },
         objects: [],
@@ -324,7 +324,7 @@ export function updateBackgroundColor(presentation: Presentation, items: ItemSel
     const updatedSlide: Slide = {
         ...slideToEdit,
         background: {
-            type: Background.BackgroundColor,
+            type: 'color',
             color: newColor,
         }
     };
@@ -350,7 +350,7 @@ export function updateBackgroundImage(presentation: Presentation, items: ItemSel
     const updatedSlide: Slide = {
         ...slideToEdit,
         background: {
-            type: Background.BackgroundImage,
+            type: 'image',
             imageUrl: newUrl,
         }
     };
@@ -376,7 +376,7 @@ export function updateBackgroundGradient(presentation: Presentation, items: Item
     const updatedSlide: Slide = {
         ...slideToEdit,
         background: {
-            type: Background.BackgroundGradient,
+            type: 'gradient',
             firstColor: newFirstColor,
             secondColor: newSecondColor,
         }

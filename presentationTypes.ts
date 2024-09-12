@@ -1,5 +1,3 @@
-import {defaultColor} from './constants';
-
 export type Presentation = {
     id: string;
     title: string;
@@ -18,24 +16,22 @@ export type Slide = {
 
 export type BackgroundType = BackgroundColor | BackgroundImage | BackgroundGradient;
 
-export enum Background {
-    BackgroundColor = 'color',
-    BackgroundImage = 'image',
-    BackgroundGradient = 'gradient',
+export type Background = {
+     type: 'color' | 'image' | 'gradient';
 }
 
 export type BackgroundColor = {
-    type: Background.BackgroundColor;
+    type: 'color';
     color: string;
 };
 
 export type BackgroundImage = {
-    type: Background.BackgroundImage;
+    type: 'image';
     imageUrl: string;
 };
 
 export type BackgroundGradient = {
-    type: Background.BackgroundGradient;
+    type: 'gradient';
     firstColor: string;
     secondColor: string;
 };
