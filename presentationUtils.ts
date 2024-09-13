@@ -1,5 +1,6 @@
 import {defaultColor, defaultFontFamily, defaultFontSize, defaultPosition, defaultSize, defaultText} from "./constants";
 import {Presentation, Slide, SlideObject, Background, SlideCollection, ItemSelection, ImageObject, TextObject, Position, Size} from "./presentationTypes";
+import { v4 as generateUuid } from 'uuid';
 
 export function updatePresentationTitle(presentation: Presentation, newTitle: string): Presentation {
     return {
@@ -10,7 +11,7 @@ export function updatePresentationTitle(presentation: Presentation, newTitle: st
 
 export function addNewSlide(presentation: Presentation): Presentation {
     const newSlide: Slide = {
-        id: `slide-${Date.now()}`,
+        id: `slide-${generateUuid()}`,
         background: {
             type: 'color',
             color: defaultColor,
@@ -27,7 +28,7 @@ export function addNewSlide(presentation: Presentation): Presentation {
 }
 
 export function removeSlides(presentation: Presentation, items: ItemSelection): Presentation {
-    const slidesToRemove = items.selectedSlides
+    const slidesToRemove = items.selectedSlidesIds
 
     const updatedSlides: SlideCollection = presentation.slides.filter(
         slide => !slidesToRemove.some(toRemove => slide.id === toRemove)
@@ -42,7 +43,7 @@ export function removeSlides(presentation: Presentation, items: ItemSelection): 
 export function updateSlideIndex(presentation: Presentation, items: ItemSelection, newIndex: number): Presentation {
     const updatedSlides: SlideCollection = [...presentation.slides];
 
-    const slideIdToMove = items.selectedSlides[0];
+    const slideIdToMove = items.selectedSlidesIds[0];
     let currentIndex: number = findSlideIndex(updatedSlides, slideIdToMove);
 
     if (currentIndex === null) {
@@ -59,10 +60,10 @@ export function updateSlideIndex(presentation: Presentation, items: ItemSelectio
 }
 
 export function addTextToSlide(presentation: Presentation, items: ItemSelection) {
-    const slideIdToEdit: string = items.selectedSlides[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
 
     const textForSlide: TextObject = {
-        id: `text-${Date.now()}`,
+        id: `text-${generateUuid()}`,
         type: 'text',
         content: defaultText,
         fontFamily: defaultFontFamily,
@@ -91,10 +92,10 @@ export function addTextToSlide(presentation: Presentation, items: ItemSelection)
 }
 
 export function addImageToSlide(presentation: Presentation, items: ItemSelection, url: string) {
-    const slideIdToEdit: string = items.selectedSlides[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
 
     const imageForSlide: ImageObject = {
-        id: `image-${Date.now()}`,
+        id: `image-${generateUuid()}`,
         type: 'image',
         imageUrl: url,
         position: defaultPosition,
@@ -121,8 +122,8 @@ export function addImageToSlide(presentation: Presentation, items: ItemSelection
 }
 
 export function removeObjectFromSlide(presentation: Presentation, items: ItemSelection): Presentation {
-    const slideIdToEdit: string = items.selectedSlides[0];
-    const objectsIdsToRemove: string[] = items.selectedObjects;
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
+    const objectsIdsToRemove: string[] = items.selectedObjectsIds;
 
     const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
@@ -149,8 +150,8 @@ export function removeObjectFromSlide(presentation: Presentation, items: ItemSel
 }
 
 export function updateObjectPosition(presentation: Presentation, items: ItemSelection, newPosition: Position) {
-    const slideIdToEdit: string = items.selectedSlides[0];
-    const objectIdToEdit: string = items.selectedObjects[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
+    const objectIdToEdit: string = items.selectedObjectsIds[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
@@ -182,8 +183,8 @@ export function updateObjectPosition(presentation: Presentation, items: ItemSele
 }
 
 export function updateObjectSize(presentation: Presentation, items: ItemSelection, newSize: Size) {
-    const slideIdToEdit: string = items.selectedSlides[0];
-    const objectIdToEdit: string = items.selectedObjects[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
+    const objectIdToEdit: string = items.selectedObjectsIds[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
@@ -215,8 +216,8 @@ export function updateObjectSize(presentation: Presentation, items: ItemSelectio
 }
 
 export function updateTextContent(presentation: Presentation, items: ItemSelection, newText: string) {
-    const slideIdToEdit: string = items.selectedSlides[0];
-    const textIdToEdit: string = items.selectedObjects[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
+    const textIdToEdit: string = items.selectedObjectsIds[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
@@ -248,8 +249,8 @@ export function updateTextContent(presentation: Presentation, items: ItemSelecti
 }
 
 export function updateTextFontSize(presentation: Presentation, items: ItemSelection, newFontSize: number) {
-    const slideIdToEdit: string = items.selectedSlides[0];
-    const textIdToEdit: string = items.selectedObjects[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
+    const textIdToEdit: string = items.selectedObjectsIds[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
@@ -281,8 +282,8 @@ export function updateTextFontSize(presentation: Presentation, items: ItemSelect
 }
 
 export function updateTextFontFamily(presentation: Presentation, items: ItemSelection, newFontFamily: string) {
-    const slideIdToEdit: string = items.selectedSlides[0];
-    const textIdToEdit: string = items.selectedObjects[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
+    const textIdToEdit: string = items.selectedObjectsIds[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
@@ -314,7 +315,7 @@ export function updateTextFontFamily(presentation: Presentation, items: ItemSele
 }
 
 export function updateBackgroundColor(presentation: Presentation, items: ItemSelection, newColor: string) {
-    const slideIdToEdit: string = items.selectedSlides[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
@@ -340,7 +341,7 @@ export function updateBackgroundColor(presentation: Presentation, items: ItemSel
 }
 
 export function updateBackgroundImage(presentation: Presentation, items: ItemSelection, newUrl: string) {
-    const slideIdToEdit: string = items.selectedSlides[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
@@ -366,7 +367,7 @@ export function updateBackgroundImage(presentation: Presentation, items: ItemSel
 }
 
 export function updateBackgroundGradient(presentation: Presentation, items: ItemSelection, newFirstColor: string, newSecondColor: string) {
-    const slideIdToEdit: string = items.selectedSlides[0];
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
 
     let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {

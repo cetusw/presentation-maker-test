@@ -2,11 +2,6 @@ import {Presentation, Slide, SlideObject, Background, SlideCollection, ItemSelec
 import {defaultColor, defaultFontFamily, defaultFontSize, defaultPosition, defaultSize, defaultText} from "./constants";
 import {updatePresentationTitle, addNewSlide, removeSlides, updateSlideIndex, addTextToSlide, addImageToSlide, removeObjectFromSlide, updateObjectPosition, updateObjectSize, updateTextContent, updateTextFontSize, updateTextFontFamily, updateBackgroundColor, updateBackgroundImage, updateBackgroundGradient} from "./presentationUtils";
 
-// let updatedPresentation = updatePresentationTitle(testPresentation, 'new title')
-// console.log(updatedPresentation)
-//
-// updatedPresentation = createNewSlide(testPresentation)
-// console.log(updatedPresentation)
 
 const testPresentation: Presentation = {
     id: '1',
@@ -67,6 +62,12 @@ const newSelectedItems: ItemSelection = {
 
 console.log(testPresentation.slides[0]);
 
+// let updatedPresentation = updatePresentationTitle(testPresentation, 'new title')
+// console.log(updatedPresentation)
+//
+let updatedPresentation = addNewSlide(testPresentation)
+console.log(updatedPresentation)
+
 // let updatedPresentation = removeSlides(testPresentation, newSelectedItems)
 // console.log(updatedPresentation);
 
@@ -94,8 +95,8 @@ console.log(testPresentation.slides[0]);
 // let updatedPresentation = updateTextFontFamily(testPresentation, newSelectedItems, 'Montserrat')
 // console.log(updatedPresentation.slides[0].objects)
 
-let updatedPresentation = updateBackgroundColor(testPresentation, newSelectedItems, '#000000')
-console.log(updatedPresentation.slides[0])
+// let updatedPresentation = updateBackgroundColor(testPresentation, newSelectedItems, '#000000')
+// console.log(updatedPresentation.slides[0])
 
 // let updatedPresentation = updateBackgroundImage(testPresentation, newSelectedItems, '/new-url')
 // console.log(updatedPresentation.slides[0])
