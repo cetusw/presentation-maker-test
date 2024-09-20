@@ -1,6 +1,7 @@
-export default {
-	ignores: ["*.js", "node_modules/", "eslint.config.js"],
-	rules: {
-		"semi": ["error", "always"],
-	}
-};
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+	eslint.configs.recommended,
+	...tseslint.configs.recommended,
+);
