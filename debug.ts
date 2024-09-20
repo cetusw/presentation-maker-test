@@ -1,58 +1,106 @@
-import {Presentation, Slide, SlideObject, Background, SlideCollection, ItemSelection, ImageObject, TextObject, Position, Size} from "./presentationTypes";
-import {defaultColor, defaultFontFamily, defaultFontSize, defaultPosition, defaultSize, defaultText} from "./constants";
-import {updatePresentationTitle, addNewSlide, removeSlides, updateSlideIndex, addTextToSlide, addImageToSlide, removeObjectFromSlide, updateObjectPosition, updateObjectSize, updateTextContent, updateTextFontSize, updateTextFontFamily, updateBackgroundColor, updateBackgroundImage, updateBackgroundGradient} from "./presentationUtils";
+import {Presentation, ItemSelection} from "./presentationTypes";
+import {updatePresentationTitle, addNewSlide, removeSlides, updateSlideIndex, addTextToSlide, addImageToSlide, removeObjectFromSlide, updateObjectPosition, updateTextContent, updateTextFontSize, updateTextFontFamily, updateBackgroundColor, updateBackgroundImage, updateBackgroundGradient} from "./presentationUtils";
 
-
-const testPresentation: Presentation = {
-    id: '1',
-    title: 'Test Presentation',
-    author: 'Mikhail',
-    createdAt: new Date('2024-09-05T00:00:00Z'),
+// Минимальные данные
+const minPresentation: Presentation = {
+    id: "1",
+    title: "Minimum Presentation",
+    author: "Mikhail",
+    createdAt: new Date("2024-09-05T00:00:00Z"),
     slides: [
         {
-            id: 'slide-1',
+            id: "slide-1",
             background: {
-                type: 'color',
-                color: defaultColor,
+                type: "color",
+                color: "#FFFFFF"
+            },
+            objects: []
+        }
+    ]
+}
+
+const maxPresentation: Presentation = {
+    id: "1",
+    title: "Maximum Presentation",
+    author: "Mikhail",
+    createdAt: new Date("2024-09-05T00:00:00Z"),
+    slides: [
+        {
+            id: "slide-1",
+            background: {
+                type: "gradient",
+                firstColor: "#FF0000",
+                secondColor: "#0000FF",
             },
             objects: [
                 {
-                    id: 'text-1',
-                    type: 'text',
-                    content: 'Test Presentation',
-                    fontFamily: 'Arial',
-                    fontSize: 24,
-                    position: { x: 100, y: 50 },
-                    size: { width: 400, height: 50 },
+                    id: "text-1",
+                    type: "text",
+                    content: "Text on slide",
+                    fontFamily: "Arial",
+                    fontSize: 72,
+                    position: {
+                        x: 0,
+                        y: 0
+                    },
+                    size: {
+                        width: 1920,
+                        height: 100
+                    }
                 },
                 {
-                    id: 'image-1',
-                    type: 'image',
-                    imageUrl: '',
-                    position: { x: 50, y: 150 },
-                    size: { width: 200, height: 150 },
-                },
-            ],
+                    id: "image-1",
+                    type: "image",
+                    imageUrl: "image.png",
+                    position: {
+                        x: 100,
+                        y: 200
+                    },
+                    size: {
+                        width: 1024,
+                        height: 768
+                    }
+                }
+            ]
         },
         {
-            id: 'slide-2',
+            id: "slide-2",
             background: {
-                type: 'image',
-                imageUrl: '',
+                type: "image",
+                imageUrl: "background.jpg"
             },
             objects: [
                 {
-                    id: 'text-1',
-                    type: 'text',
-                    content: 'Test Presentation',
-                    fontFamily: 'Arial',
-                    fontSize: 30,
-                    position: { x: 80, y: 70 },
-                    size: { width: 350, height: 60 },
+                    id: "text-2",
+                    type: "text",
+                    content: "Text on slide",
+                    fontFamily: "Times New Roman",
+                    fontSize: 60,
+                    position: {
+                        x: 200,
+                        y: 300
+                    },
+                    size: {
+                        width: 1600,
+                        height: 90
+                    }
                 },
-            ],
-        },
-    ],
+                {
+                    id: "image-2",
+                    type: "image",
+                    imageUrl: "image.jpg",
+                    position: {
+                        x: 500,
+                        y: 500
+                    },
+                    size: {
+                        width: 1280,
+                        height: 1024
+                    }
+                }
+            ]
+        }
+    ]
 };
 
 const newSelectedItems: ItemSelection = {
@@ -60,46 +108,176 @@ const newSelectedItems: ItemSelection = {
     selectedObjectsIds: ['image-1', 'text-1'],
 }
 
-console.log(testPresentation.slides[0]);
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ####################");
+console.log(minPresentation);
 
-// let updatedPresentation = updatePresentationTitle(testPresentation, 'new title')
-// console.log(updatedPresentation)
-//
-let updatedPresentation = addNewSlide(testPresentation)
-console.log(updatedPresentation)
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ####################");
+console.log(maxPresentation);
 
-// let updatedPresentation = removeSlides(testPresentation, newSelectedItems)
-// console.log(updatedPresentation);
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updatePresentationTitle ####################");
+console.log(minPresentation);
+let updatedPresentation = updatePresentationTitle(minPresentation, 'new title');
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updatePresentationTitle ####################");
+console.log(updatedPresentation);
 
-// let updatedPresentation = updateSlideIndex(testPresentation, newSelectedItems, 2);
-// console.log(updatedPresentation);
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updatePresentationTitle ####################");
+console.log(maxPresentation);
+updatedPresentation = updatePresentationTitle(maxPresentation, 'new title');
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updatePresentationTitle ####################");
+console.log(updatedPresentation);
 
-// let updatedPresentation = addTextToSlide(testPresentation, newSelectedItems);
-// console.log(updatedPresentation.slides[0].objects);
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО addNewSlide ####################");
+console.log(minPresentation);
+updatedPresentation = addNewSlide(minPresentation);
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ addNewSlide ####################");
+console.log(updatedPresentation);
 
-// let updatedPresentation = removeObjectFromSlide(testPresentation, newSelectedItems)
-// console.log(updatedPresentation.slides)
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО addNewSlide ####################");
+console.log(maxPresentation);
+updatedPresentation = addNewSlide(maxPresentation);
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ addNewSlide ####################");
+console.log(updatedPresentation);
 
-// let updatedPresentation = addImageToSlide(testPresentation, newSelectedItems, '/url')
-// console.log(updatedPresentation.slides[0].objects)
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО removeSlides ####################");
+console.log(minPresentation);
+updatedPresentation = removeSlides(minPresentation, newSelectedItems);
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ removeSlides ####################");
+console.log(updatedPresentation);
 
-// let updatedPresentation = updateObjectPosition(testPresentation, newSelectedItems, 1, 1)
-// console.log(updatedPresentation.slides[0].objects)
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО removeSlides ####################");
+console.log(maxPresentation);
+updatedPresentation = removeSlides(maxPresentation, newSelectedItems);
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ removeSlides ####################");
+console.log(updatedPresentation);
 
-// let updatedPresentation = updateTextContent(testPresentation, newSelectedItems, 'super new text')
-// console.log(updatedPresentation.slides[0].objects)
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateSlideIndex ####################");
+console.log(minPresentation);
+updatedPresentation = updateSlideIndex(minPresentation, newSelectedItems, 2);
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateSlideIndex ####################");
+console.log(updatedPresentation);
 
-// let updatedPresentation = updateTextFontSize(testPresentation, newSelectedItems, 30)
-// console.log(updatedPresentation.slides[0].objects)
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateSlideIndex ####################");
+console.log(maxPresentation);
+updatedPresentation = updateSlideIndex(maxPresentation, newSelectedItems, 2);
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateSlideIndex ####################");
+console.log(updatedPresentation);
 
-// let updatedPresentation = updateTextFontFamily(testPresentation, newSelectedItems, 'Montserrat')
-// console.log(updatedPresentation.slides[0].objects)
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО addTextToSlide ####################");
+console.log(minPresentation);
+updatedPresentation = addTextToSlide(minPresentation, newSelectedItems);
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ addTextToSlide ####################");
+console.log(updatedPresentation.slides[0].objects);
 
-// let updatedPresentation = updateBackgroundColor(testPresentation, newSelectedItems, '#000000')
-// console.log(updatedPresentation.slides[0])
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО addTextToSlide ####################");
+console.log(maxPresentation);
+updatedPresentation = addTextToSlide(maxPresentation, newSelectedItems);
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ addTextToSlide ####################");
+console.log(updatedPresentation.slides[0].objects);
 
-// let updatedPresentation = updateBackgroundImage(testPresentation, newSelectedItems, '/new-url')
-// console.log(updatedPresentation.slides[0])
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО removeObjectFromSlide ####################");
+console.log(minPresentation);
+updatedPresentation = removeObjectFromSlide(minPresentation, newSelectedItems);
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ removeObjectFromSlide ####################");
+console.log(updatedPresentation.slides);
 
-//let updatedPresentation = updateBackgroundGradient(testPresentation, newSelectedItems, '#123456', '#654321')
-//console.log(updatedPresentation.slides[0])
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО removeObjectFromSlide ####################");
+console.log(maxPresentation);
+updatedPresentation = removeObjectFromSlide(maxPresentation, newSelectedItems);
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ removeObjectFromSlide ####################");
+console.log(updatedPresentation.slides);
+
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО addImageToSlide ####################");
+console.log(minPresentation);
+updatedPresentation = addImageToSlide(minPresentation, newSelectedItems, '/url');
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ addImageToSlide ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО addImageToSlide ####################");
+console.log(maxPresentation);
+updatedPresentation = addImageToSlide(maxPresentation, newSelectedItems, '/url');
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ addImageToSlide ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateObjectPosition ####################");
+console.log(minPresentation);
+updatedPresentation = updateObjectPosition(minPresentation, newSelectedItems, {x: 1, y: 1});
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateObjectPosition ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateObjectPosition ####################");
+console.log(maxPresentation);
+updatedPresentation = updateObjectPosition(maxPresentation, newSelectedItems, {x: 1, y: 1});
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateObjectPosition ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateTextContent ####################");
+console.log(minPresentation);
+updatedPresentation = updateTextContent(minPresentation, newSelectedItems, 'super new text');
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateTextContent ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateTextContent ####################");
+console.log(maxPresentation);
+updatedPresentation = updateTextContent(maxPresentation, newSelectedItems, 'super new text');
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateTextContent ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateTextFontSize ####################");
+console.log(minPresentation);
+updatedPresentation = updateTextFontSize(minPresentation, newSelectedItems, 30);
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateTextFontSize ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateTextFontSize ####################");
+console.log(maxPresentation);
+updatedPresentation = updateTextFontSize(maxPresentation, newSelectedItems, 30);
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateTextFontSize ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateTextFontFamily ####################");
+console.log(minPresentation);
+updatedPresentation = updateTextFontFamily(minPresentation, newSelectedItems, 'Montserrat');
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateTextFontFamily ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateTextFontFamily ####################");
+console.log(maxPresentation);
+updatedPresentation = updateTextFontFamily(maxPresentation, newSelectedItems, 'Montserrat');
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateTextFontFamily ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateBackgroundColor ####################");
+console.log(minPresentation);
+updatedPresentation = updateBackgroundColor(minPresentation, newSelectedItems, '#000000');
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateBackgroundColor ####################");
+console.log(updatedPresentation.slides[0]);
+
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateBackgroundColor ####################");
+console.log(maxPresentation);
+updatedPresentation = updateBackgroundColor(maxPresentation, newSelectedItems, '#000000');
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateBackgroundColor ####################");
+console.log(updatedPresentation.slides[0]);
+
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateBackgroundImage ####################");
+console.log(minPresentation);
+updatedPresentation = updateBackgroundImage(minPresentation, newSelectedItems, '/new-url');
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateBackgroundImage ####################");
+console.log(updatedPresentation.slides[0]);
+
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateBackgroundImage ####################");
+console.log(maxPresentation);
+updatedPresentation = updateBackgroundImage(maxPresentation, newSelectedItems, '/new-url');
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateBackgroundImage ####################");
+console.log(updatedPresentation.slides[0]);
+
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateBackgroundGradient ####################");
+console.log(minPresentation);
+updatedPresentation = updateBackgroundGradient(minPresentation, newSelectedItems, '#123456', '#654321');
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateBackgroundGradient ####################");
+console.log(updatedPresentation.slides[0]);
+
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateBackgroundGradient ####################");
+console.log(maxPresentation);
+updatedPresentation = updateBackgroundGradient(maxPresentation, newSelectedItems, '#123456', '#654321');
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateBackgroundGradient ####################");
+console.log(updatedPresentation.slides[0]);

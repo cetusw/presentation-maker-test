@@ -3,10 +3,8 @@ export type Presentation = {
     title: string;
     author: string;
     createdAt: Date;
-    slides: SlideCollection;
+    slides: Slide[];
 }
-
-export type SlideCollection = Slide[];
 
 export type Slide = {
     id: string;
@@ -15,10 +13,6 @@ export type Slide = {
 }
 
 export type BackgroundType = BackgroundColor | BackgroundImage | BackgroundGradient;
-
-export type Background = {
-     type: 'color' | 'image' | 'gradient';
-}
 
 export type BackgroundColor = {
     type: 'color';
@@ -39,12 +33,12 @@ export type BackgroundGradient = {
 export type SlideObject = TextObject | ImageObject;
 
 export type SlideItem = {
+    id: string;
     position: Position;
     size: Size;
 }
 
 export type TextObject = SlideItem & {
-    id: string;
     type: 'text';
     content: string;
     fontFamily: string;
@@ -52,7 +46,6 @@ export type TextObject = SlideItem & {
 };
 
 export type ImageObject = SlideItem & {
-    id: string;
     type: 'image';
     imageUrl: string;
 };

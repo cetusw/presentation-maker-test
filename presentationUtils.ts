@@ -1,5 +1,5 @@
 import {defaultColor, defaultFontFamily, defaultFontSize, defaultPosition, defaultSize, defaultText} from "./constants";
-import {Presentation, Slide, SlideObject, Background, SlideCollection, ItemSelection, ImageObject, TextObject, Position, Size} from "./presentationTypes";
+import {Presentation, Slide, SlideObject, ItemSelection, ImageObject, TextObject, Position, Size} from "./presentationTypes";
 import { v4 as generateUuid } from 'uuid';
 
 export function updatePresentationTitle(presentation: Presentation, newTitle: string): Presentation {
@@ -19,7 +19,7 @@ export function addNewSlide(presentation: Presentation): Presentation {
         objects: [],
     };
 
-    const updatedSlides: SlideCollection = [...presentation.slides, newSlide];
+    const updatedSlides: Slide[] = [...presentation.slides, newSlide];
 
     return {
         ...presentation,
@@ -30,7 +30,7 @@ export function addNewSlide(presentation: Presentation): Presentation {
 export function removeSlides(presentation: Presentation, items: ItemSelection): Presentation {
     const slidesToRemove = items.selectedSlidesIds
 
-    const updatedSlides: SlideCollection = presentation.slides.filter(
+    const updatedSlides: Slide[] = presentation.slides.filter(
         slide => !slidesToRemove.some(toRemove => slide.id === toRemove)
     );
 
@@ -41,10 +41,10 @@ export function removeSlides(presentation: Presentation, items: ItemSelection): 
 }
 
 export function updateSlideIndex(presentation: Presentation, items: ItemSelection, newIndex: number): Presentation {
-    const updatedSlides: SlideCollection = [...presentation.slides];
+    const updatedSlides: Slide[] = [...presentation.slides];
 
     const slideIdToMove = items.selectedSlidesIds[0];
-    let currentIndex: number = findSlideIndex(updatedSlides, slideIdToMove);
+    const currentIndex: number = findSlideIndex(updatedSlides, slideIdToMove);
 
     if (currentIndex === null) {
         return presentation;
@@ -139,7 +139,7 @@ export function removeObjectFromSlide(presentation: Presentation, items: ItemSel
         objects: updatedObjects,
     };
 
-    const updatedSlides: SlideCollection = presentation.slides.map(slide =>
+    const updatedSlides: Slide[] = presentation.slides.map(slide =>
         slide.id === slideIdToEdit ? updatedSlide : slide
     );
 
@@ -153,7 +153,7 @@ export function updateObjectPosition(presentation: Presentation, items: ItemSele
     const slideIdToEdit: string = items.selectedSlidesIds[0];
     const objectIdToEdit: string = items.selectedObjectsIds[0];
 
-    let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
@@ -172,7 +172,7 @@ export function updateObjectPosition(presentation: Presentation, items: ItemSele
         objects: updatedObjects,
     };
 
-    const updatedSlides: SlideCollection = presentation.slides.map(slide =>
+    const updatedSlides: Slide[] = presentation.slides.map(slide =>
         slide.id === slideIdToEdit ? updatedSlide : slide
     );
 
@@ -186,7 +186,7 @@ export function updateObjectSize(presentation: Presentation, items: ItemSelectio
     const slideIdToEdit: string = items.selectedSlidesIds[0];
     const objectIdToEdit: string = items.selectedObjectsIds[0];
 
-    let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
@@ -205,7 +205,7 @@ export function updateObjectSize(presentation: Presentation, items: ItemSelectio
         objects: updatedObjects,
     };
 
-    const updatedSlides: SlideCollection = presentation.slides.map(slide =>
+    const updatedSlides: Slide[] = presentation.slides.map(slide =>
         slide.id === slideIdToEdit ? updatedSlide : slide
     );
 
@@ -219,7 +219,7 @@ export function updateTextContent(presentation: Presentation, items: ItemSelecti
     const slideIdToEdit: string = items.selectedSlidesIds[0];
     const textIdToEdit: string = items.selectedObjectsIds[0];
 
-    let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
@@ -238,7 +238,7 @@ export function updateTextContent(presentation: Presentation, items: ItemSelecti
         objects: updatedObjects,
     };
 
-    const updatedSlides: SlideCollection = presentation.slides.map(slide =>
+    const updatedSlides: Slide[] = presentation.slides.map(slide =>
         slide.id === slideIdToEdit ? updatedSlide : slide
     );
 
@@ -252,7 +252,7 @@ export function updateTextFontSize(presentation: Presentation, items: ItemSelect
     const slideIdToEdit: string = items.selectedSlidesIds[0];
     const textIdToEdit: string = items.selectedObjectsIds[0];
 
-    let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
@@ -271,7 +271,7 @@ export function updateTextFontSize(presentation: Presentation, items: ItemSelect
         objects: updatedObjects,
     };
 
-    const updatedSlides: SlideCollection = presentation.slides.map(slide =>
+    const updatedSlides: Slide[] = presentation.slides.map(slide =>
         slide.id === slideIdToEdit ? updatedSlide : slide
     );
 
@@ -285,7 +285,7 @@ export function updateTextFontFamily(presentation: Presentation, items: ItemSele
     const slideIdToEdit: string = items.selectedSlidesIds[0];
     const textIdToEdit: string = items.selectedObjectsIds[0];
 
-    let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
@@ -304,7 +304,7 @@ export function updateTextFontFamily(presentation: Presentation, items: ItemSele
         objects: updatedObjects,
     };
 
-    const updatedSlides: SlideCollection = presentation.slides.map(slide =>
+    const updatedSlides: Slide[] = presentation.slides.map(slide =>
         slide.id === slideIdToEdit ? updatedSlide : slide
     );
 
@@ -317,7 +317,7 @@ export function updateTextFontFamily(presentation: Presentation, items: ItemSele
 export function updateBackgroundColor(presentation: Presentation, items: ItemSelection, newColor: string) {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
 
-    let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
@@ -330,7 +330,7 @@ export function updateBackgroundColor(presentation: Presentation, items: ItemSel
         }
     };
 
-    const updatedSlides: SlideCollection = presentation.slides.map(slide =>
+    const updatedSlides: Slide[] = presentation.slides.map(slide =>
         slide.id === slideIdToEdit ? updatedSlide : slide
     );
 
@@ -343,7 +343,7 @@ export function updateBackgroundColor(presentation: Presentation, items: ItemSel
 export function updateBackgroundImage(presentation: Presentation, items: ItemSelection, newUrl: string) {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
 
-    let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
@@ -356,7 +356,7 @@ export function updateBackgroundImage(presentation: Presentation, items: ItemSel
         }
     };
 
-    const updatedSlides: SlideCollection = presentation.slides.map(slide =>
+    const updatedSlides: Slide[] = presentation.slides.map(slide =>
         slide.id === slideIdToEdit ? updatedSlide : slide
     );
 
@@ -369,7 +369,7 @@ export function updateBackgroundImage(presentation: Presentation, items: ItemSel
 export function updateBackgroundGradient(presentation: Presentation, items: ItemSelection, newFirstColor: string, newSecondColor: string) {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
 
-    let slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
@@ -383,7 +383,7 @@ export function updateBackgroundGradient(presentation: Presentation, items: Item
         }
     };
 
-    const updatedSlides: SlideCollection = presentation.slides.map(slide =>
+    const updatedSlides: Slide[] = presentation.slides.map(slide =>
         slide.id === slideIdToEdit ? updatedSlide : slide
     );
 
@@ -394,19 +394,20 @@ export function updateBackgroundGradient(presentation: Presentation, items: Item
 }
 
 
-function findSlideIndex(slides: SlideCollection, slideId: string) {
-    let currentIndex: number | null = null;
+function findSlideIndex(slides: Slide[], slideId: string): number {
     for (let i = 0; i < slides.length; i++) {
         if (slides[i].id === slideId) {
             return i;
         }
     }
+    return -1
 }
 
-function findSlideById(slides: SlideCollection, slideId: string) {
+function findSlideById(slides: Slide[], slideId: string) {
     for (let i = 0; i < slides.length; i++) {
         if (slides[i].id === slideId) {
             return slides[i];
         }
     }
+    return {} as Slide
 }
