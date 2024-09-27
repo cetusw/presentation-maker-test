@@ -1,5 +1,5 @@
 import {defaultColor, defaultFontFamily, defaultFontSize, defaultPosition, defaultSize, defaultText} from "./constants";
-import {Presentation, Slide, SlideObject, ItemSelection, ImageObject, TextObject, Position, Size} from "./presentationTypes";
+import {Presentation, Slide, SlideObject, ItemSelection, ImageObject, TextObject, Position, Size, BackgroundType} from "./presentationTypes";
 import { v4 as generateUuid } from 'uuid';
 
 export function updatePresentationTitle(presentation: Presentation, newTitle: string): Presentation {
@@ -44,7 +44,7 @@ export function updateSlideIndex(presentation: Presentation, items: ItemSelectio
     const updatedSlides: Slide[] = [...presentation.slides];
 
     const slideIdToMove = items.selectedSlidesIds[0];
-    const currentIndex: number = findSlideIndex(updatedSlides, slideIdToMove);
+    const currentIndex: number = updatedSlides.findIndex(slide => slide.id === slideIdToMove);
 
     if (currentIndex === null) {
         return presentation;
@@ -57,6 +57,27 @@ export function updateSlideIndex(presentation: Presentation, items: ItemSelectio
         ...presentation,
         slides: updatedSlides,
     };
+}
+
+function addObjectToSlide(presentation: Presentation, slideIdToEdit: string, object: SlideObject) {
+    const slideToEdit = presentation.slides.find(slide => slide.id === slideIdToEdit);
+    if (!slideToEdit) {
+        return presentation;
+    }
+
+    const updatedObjects: SlideObject[] = [...slideToEdit.objects, object];
+
+    const updatedSlide: Slide = {
+        ...slideToEdit,
+        objects: updatedObjects,
+    }
+
+    const updatedSlides: Slide[] = presentation.slides.map(slide => slide.id === slideToEdit.id ? updatedSlide : slide);
+
+    return {
+        ...presentation,
+        slides: updatedSlides,
+    }
 }
 
 export function addTextToSlide(presentation: Presentation, items: ItemSelection) {
@@ -72,23 +93,7 @@ export function addTextToSlide(presentation: Presentation, items: ItemSelection)
         size: defaultSize,
     }
 
-    const slideToEdit: Slide = findSlideById(presentation.slides, slideIdToEdit);
-    if (!slideToEdit) {
-        return presentation;
-    }
-    const updatedObjects: SlideObject[] = [...slideToEdit.objects, textForSlide];
-
-    const updatedSlide: Slide = {
-        ...slideToEdit,
-        objects: updatedObjects,
-    }
-
-    const updatedSlides: Slide[] = presentation.slides.map(slide => slide.id === slideToEdit.id ? updatedSlide : slide);
-
-    return {
-        ...presentation,
-        slides: updatedSlides,
-    }
+    return addObjectToSlide(presentation, slideIdToEdit, textForSlide);
 }
 
 export function addImageToSlide(presentation: Presentation, items: ItemSelection, url: string) {
@@ -102,30 +107,14 @@ export function addImageToSlide(presentation: Presentation, items: ItemSelection
         size: defaultSize,
     }
 
-    const slideToEdit: Slide = findSlideById(presentation.slides, slideIdToEdit);
-    if (!slideToEdit) {
-        return presentation;
-    }
-    const updatedObjects: SlideObject[] = [...slideToEdit.objects, imageForSlide];
-
-    const updatedSlide: Slide = {
-        ...slideToEdit,
-        objects: updatedObjects,
-    }
-
-    const updatedSlides: Slide[] = presentation.slides.map(slide => slide.id === slideToEdit.id ? updatedSlide : slide);
-
-    return {
-        ...presentation,
-        slides: updatedSlides,
-    }
+    return addObjectToSlide(presentation, slideIdToEdit, imageForSlide);
 }
 
 export function removeObjectFromSlide(presentation: Presentation, items: ItemSelection): Presentation {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
     const objectsIdsToRemove: string[] = items.selectedObjectsIds;
 
-    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = presentation.slides.find(slide => slide.id === slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
@@ -149,22 +138,17 @@ export function removeObjectFromSlide(presentation: Presentation, items: ItemSel
     };
 }
 
-export function updateObjectPosition(presentation: Presentation, items: ItemSelection, newPosition: Position) {
-    const slideIdToEdit: string = items.selectedSlidesIds[0];
-    const objectIdToEdit: string = items.selectedObjectsIds[0];
+function updateSlideObject(presentation: Presentation, slideIdToEdit: string, newObject: SlideObject) {
+    const slideToEdit = presentation.slides.find(slide => slide.id === slideIdToEdit);
 
-    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
     if (!slideToEdit) {
         return presentation;
     }
 
     const updatedObjects: SlideObject[] = slideToEdit.objects.map((obj) => {
-        if (obj.id !== objectIdToEdit) return obj;
+        if (obj.id !== newObject.id) return obj;
 
-        return {
-            ...obj,
-            position: newPosition,
-        };
+        return newObject;
     });
 
     const updatedSlide: Slide = {
@@ -180,154 +164,107 @@ export function updateObjectPosition(presentation: Presentation, items: ItemSele
         ...presentation,
         slides: updatedSlides,
     };
+}
+
+export function updateObjectPosition(presentation: Presentation, items: ItemSelection, newPosition: Position) {
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
+    const objectToEdit = findSelectedObject(presentation, items);
+
+    if (!objectToEdit) {
+        return presentation
+    }
+
+    return updateSlideObject(presentation, slideIdToEdit, {
+        ...objectToEdit,
+        position: newPosition,
+    });
 }
 
 export function updateObjectSize(presentation: Presentation, items: ItemSelection, newSize: Size) {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
-    const objectIdToEdit: string = items.selectedObjectsIds[0];
+    const objectToEdit = findSelectedObject(presentation, items);
 
-    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
-    if (!slideToEdit) {
-        return presentation;
+    if (!objectToEdit) {
+        return presentation
     }
 
-    const updatedObjects: SlideObject[] = slideToEdit.objects.map((obj) => {
-        if (obj.id !== objectIdToEdit) return obj;
-
-        return {
-            ...obj,
-            size: newSize,
-        };
+    return updateSlideObject(presentation, slideIdToEdit, {
+        ...objectToEdit,
+        size: newSize,
     });
-
-    const updatedSlide: Slide = {
-        ...slideToEdit,
-        objects: updatedObjects,
-    };
-
-    const updatedSlides: Slide[] = presentation.slides.map(slide =>
-        slide.id === slideIdToEdit ? updatedSlide : slide
-    );
-
-    return {
-        ...presentation,
-        slides: updatedSlides,
-    };
 }
 
 export function updateTextContent(presentation: Presentation, items: ItemSelection, newText: string) {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
-    const textIdToEdit: string = items.selectedObjectsIds[0];
+    const objectToEdit = findSelectedObject(presentation, items);
 
-    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
-    if (!slideToEdit) {
-        return presentation;
+    if (!objectToEdit) {
+        return presentation
     }
 
-    const updatedObjects: SlideObject[] = slideToEdit.objects.map((obj) => {
-        if (obj.id !== textIdToEdit) return obj;
-
-        return {
-            ...obj,
-            content: newText,
-        };
+    return updateSlideObject(presentation, slideIdToEdit, {
+        ...objectToEdit,
+        content: newText,
     });
-
-    const updatedSlide: Slide = {
-        ...slideToEdit,
-        objects: updatedObjects,
-    };
-
-    const updatedSlides: Slide[] = presentation.slides.map(slide =>
-        slide.id === slideIdToEdit ? updatedSlide : slide
-    );
-
-    return {
-        ...presentation,
-        slides: updatedSlides,
-    };
 }
 
 export function updateTextFontSize(presentation: Presentation, items: ItemSelection, newFontSize: number) {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
-    const textIdToEdit: string = items.selectedObjectsIds[0];
+    const objectToEdit = findSelectedObject(presentation, items);
 
-    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
-    if (!slideToEdit) {
-        return presentation;
+    if (!objectToEdit) {
+        return presentation
     }
 
-    const updatedObjects: SlideObject[] = slideToEdit.objects.map((obj) => {
-        if (obj.id !== textIdToEdit) return obj;
-
-        return {
-            ...obj,
-            fontSize: newFontSize,
-        };
+    return updateSlideObject(presentation, slideIdToEdit, {
+        ...objectToEdit,
+        fontSize: newFontSize,
     });
-
-    const updatedSlide: Slide = {
-        ...slideToEdit,
-        objects: updatedObjects,
-    };
-
-    const updatedSlides: Slide[] = presentation.slides.map(slide =>
-        slide.id === slideIdToEdit ? updatedSlide : slide
-    );
-
-    return {
-        ...presentation,
-        slides: updatedSlides,
-    };
 }
 
 export function updateTextFontFamily(presentation: Presentation, items: ItemSelection, newFontFamily: string) {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
-    const textIdToEdit: string = items.selectedObjectsIds[0];
+    const objectToEdit = findSelectedObject(presentation, items);
 
-    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
-    if (!slideToEdit) {
-        return presentation;
+    if (!objectToEdit) {
+        return presentation
     }
 
-    const updatedObjects: SlideObject[] = slideToEdit.objects.map((obj) => {
-        if (obj.id !== textIdToEdit) return obj;
-
-        return {
-            ...obj,
-            fontFamily: newFontFamily,
-        };
+    return updateSlideObject(presentation, slideIdToEdit, {
+        ...objectToEdit,
+        fontFamily: newFontFamily,
     });
-
-    const updatedSlide: Slide = {
-        ...slideToEdit,
-        objects: updatedObjects,
-    };
-
-    const updatedSlides: Slide[] = presentation.slides.map(slide =>
-        slide.id === slideIdToEdit ? updatedSlide : slide
-    );
-
-    return {
-        ...presentation,
-        slides: updatedSlides,
-    };
 }
 
-export function updateBackgroundColor(presentation: Presentation, items: ItemSelection, newColor: string) {
+function findSelectedObject(presentation: Presentation, items: ItemSelection) {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
+    const objectIdToEdit: string = items.selectedObjectsIds[0];
 
-    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
+    const slideToEdit = presentation.slides.find(slide => slide.id === slideIdToEdit);
+
+    if (!slideToEdit) {
+        return false;
+    }
+
+    const objectToEdit = slideToEdit.objects.find(object => object.id === objectIdToEdit);
+
+    if (!objectToEdit || objectToEdit.type !== 'text') {
+        return false;
+    }
+
+    return objectToEdit
+}
+
+function updateSlideBackground(presentation: Presentation, slideIdToEdit: string, newBackground: BackgroundType): Presentation {
+    const slideToEdit = presentation.slides.find(slide => slide.id === slideIdToEdit);
+
     if (!slideToEdit) {
         return presentation;
     }
 
     const updatedSlide: Slide = {
         ...slideToEdit,
-        background: {
-            type: 'color',
-            color: newColor,
-        }
+        background: newBackground,
     };
 
     const updatedSlides: Slide[] = presentation.slides.map(slide =>
@@ -340,74 +277,27 @@ export function updateBackgroundColor(presentation: Presentation, items: ItemSel
     };
 }
 
-export function updateBackgroundImage(presentation: Presentation, items: ItemSelection, newUrl: string) {
+export function updateBackgroundColor(presentation: Presentation, items: ItemSelection, newColor: string): Presentation {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
-
-    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
-    if (!slideToEdit) {
-        return presentation;
-    }
-
-    const updatedSlide: Slide = {
-        ...slideToEdit,
-        background: {
-            type: 'image',
-            imageUrl: newUrl,
-        }
-    };
-
-    const updatedSlides: Slide[] = presentation.slides.map(slide =>
-        slide.id === slideIdToEdit ? updatedSlide : slide
-    );
-
-    return {
-        ...presentation,
-        slides: updatedSlides,
-    };
+    return updateSlideBackground(presentation, slideIdToEdit, {
+        type: 'color',
+        color: newColor,
+    });
 }
 
-export function updateBackgroundGradient(presentation: Presentation, items: ItemSelection, newFirstColor: string, newSecondColor: string) {
+export function updateBackgroundImage(presentation: Presentation, items: ItemSelection, newUrl: string): Presentation {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
-
-    const slideToEdit = findSlideById(presentation.slides, slideIdToEdit);
-    if (!slideToEdit) {
-        return presentation;
-    }
-
-    const updatedSlide: Slide = {
-        ...slideToEdit,
-        background: {
-            type: 'gradient',
-            firstColor: newFirstColor,
-            secondColor: newSecondColor,
-        }
-    };
-
-    const updatedSlides: Slide[] = presentation.slides.map(slide =>
-        slide.id === slideIdToEdit ? updatedSlide : slide
-    );
-
-    return {
-        ...presentation,
-        slides: updatedSlides,
-    };
+    return updateSlideBackground(presentation, slideIdToEdit, {
+        type: 'image',
+        imageUrl: newUrl,
+    });
 }
 
-
-function findSlideIndex(slides: Slide[], slideId: string): number {
-    for (let i = 0; i < slides.length; i++) {
-        if (slides[i].id === slideId) {
-            return i;
-        }
-    }
-    return -1
-}
-
-function findSlideById(slides: Slide[], slideId: string) {
-    for (let i = 0; i < slides.length; i++) {
-        if (slides[i].id === slideId) {
-            return slides[i];
-        }
-    }
-    return {} as Slide
+export function updateBackgroundGradient(presentation: Presentation, items: ItemSelection, newFirstColor: string, newSecondColor: string): Presentation {
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
+    return updateSlideBackground(presentation, slideIdToEdit, {
+        type: 'gradient',
+        firstColor: newFirstColor,
+        secondColor: newSecondColor,
+    });
 }

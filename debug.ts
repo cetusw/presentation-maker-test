@@ -1,5 +1,21 @@
 import {Presentation, ItemSelection} from "./presentationTypes";
-import {updatePresentationTitle, addNewSlide, removeSlides, updateSlideIndex, addTextToSlide, addImageToSlide, removeObjectFromSlide, updateObjectPosition, updateTextContent, updateTextFontSize, updateTextFontFamily, updateBackgroundColor, updateBackgroundImage, updateBackgroundGradient} from "./presentationUtils";
+import {
+    updatePresentationTitle,
+    addNewSlide,
+    removeSlides,
+    updateSlideIndex,
+    addTextToSlide,
+    addImageToSlide,
+    removeObjectFromSlide,
+    updateObjectPosition,
+    updateTextContent,
+    updateTextFontSize,
+    updateTextFontFamily,
+    updateBackgroundColor,
+    updateBackgroundImage,
+    updateBackgroundGradient,
+    updateObjectSize
+} from "./presentationUtils";
 
 // Минимальные данные
 const minPresentation: Presentation = {
@@ -207,6 +223,18 @@ console.log(updatedPresentation.slides[0].objects);
 console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateObjectPosition ####################");
 console.log(maxPresentation.slides[0].objects);
 updatedPresentation = updateObjectPosition(maxPresentation, newSelectedItems, {x: 1, y: 1});
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateObjectPosition ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateObjectPosition ####################");
+console.log(minPresentation.slides[0].objects);
+updatedPresentation = updateObjectSize(minPresentation, newSelectedItems, {width: 1, height: 1});
+console.log("\n#################### МИНИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateObjectPosition ####################");
+console.log(updatedPresentation.slides[0].objects);
+
+console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ДО updateObjectPosition ####################");
+console.log(maxPresentation.slides[0].objects);
+updatedPresentation = updateObjectSize(maxPresentation, newSelectedItems, {width: 1, height: 1});
 console.log("\n#################### МАКСИМАЛЬНАЯ ПРЕЗЕНТАЦИЯ ПОСЛЕ updateObjectPosition ####################");
 console.log(updatedPresentation.slides[0].objects);
 
