@@ -46,7 +46,7 @@ export function updateSlideIndex(presentation: Presentation, items: ItemSelectio
     const slideIdToMove = items.selectedSlidesIds[0];
     const currentIndex: number = updatedSlides.findIndex(slide => slide.id === slideIdToMove);
 
-    if (currentIndex === null) {
+    if (currentIndex === -1) {
         return presentation;
     }
 
@@ -166,6 +166,25 @@ function updateSlideObject(presentation: Presentation, slideIdToEdit: string, ne
     };
 }
 
+function findSelectedObject(presentation: Presentation, items: ItemSelection) {
+    const slideIdToEdit: string = items.selectedSlidesIds[0];
+    const objectIdToEdit: string = items.selectedObjectsIds[0];
+
+    const slideToEdit = presentation.slides.find(slide => slide.id === slideIdToEdit);
+
+    if (!slideToEdit) {
+        return false;
+    }
+
+    const objectToEdit = slideToEdit.objects.find(object => object.id === objectIdToEdit);
+
+    if (!objectToEdit || objectToEdit.type !== 'text') {
+        return false;
+    }
+
+    return objectToEdit
+}
+
 export function updateObjectPosition(presentation: Presentation, items: ItemSelection, newPosition: Position) {
     const slideIdToEdit: string = items.selectedSlidesIds[0];
     const objectToEdit = findSelectedObject(presentation, items);
@@ -234,25 +253,6 @@ export function updateTextFontFamily(presentation: Presentation, items: ItemSele
         ...objectToEdit,
         fontFamily: newFontFamily,
     });
-}
-
-function findSelectedObject(presentation: Presentation, items: ItemSelection) {
-    const slideIdToEdit: string = items.selectedSlidesIds[0];
-    const objectIdToEdit: string = items.selectedObjectsIds[0];
-
-    const slideToEdit = presentation.slides.find(slide => slide.id === slideIdToEdit);
-
-    if (!slideToEdit) {
-        return false;
-    }
-
-    const objectToEdit = slideToEdit.objects.find(object => object.id === objectIdToEdit);
-
-    if (!objectToEdit || objectToEdit.type !== 'text') {
-        return false;
-    }
-
-    return objectToEdit
 }
 
 function updateSlideBackground(presentation: Presentation, slideIdToEdit: string, newBackground: BackgroundType): Presentation {
